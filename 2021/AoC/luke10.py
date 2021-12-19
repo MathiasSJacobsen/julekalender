@@ -24,8 +24,10 @@ def filterCorruptedFiles(list: List[str]) -> List[str]:
         '}': '{',
     }
     incorrect = []
+    scoresForFixing = []
 
     for line in list:
+        t = True
         stack = []
         for char in line:
             if char in brackets.values():
@@ -34,8 +36,25 @@ def filterCorruptedFiles(list: List[str]) -> List[str]:
                 item = stack.pop()
                 if item != brackets[char]:
                     incorrect.append(char)
+                    t = False
                     break
+        if t:
+            scoresForFixing.append(calculatePoiontsForFixingLines(stack))
+    scoresForFixing.sort()
+    print(scoresForFixing[len(scoresForFixing)//2])
     return incorrect
+
+def calculatePoiontsForFixingLines(list : List[str]):
+    points = {
+        '(': 1,
+        '[': 2,
+        '{': 3,
+        '<': 4,
+    }
+    p = 0
+    for char in list[::-1]:
+        p = p * 5 + points[char]
+    return p
 
 if __name__ == '__main__':
     
